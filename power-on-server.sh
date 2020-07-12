@@ -5,6 +5,7 @@
 # cronetab -e
 # @reboot bash /home/pi/power-on-server.sh > power-on-server.log
 # requires etherwake and wakeonlan (apt-get)
+# installed etherwake and wakeonlan beacuse I had some issues with one or the other between updates, so I added both
 
 PING="/bin/ping -q -c1"
 HOST=192.168.0.20
