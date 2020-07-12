@@ -15,7 +15,8 @@ I use this to ping my servers and wake them up if they are off.  They should nev
 `cronetab -e`
 
 `@reboot bash /home/pi/power-on-server.sh > power-on-server.log`
+(will run at reboot and will pipe out logs)
 
-requires etherwake and wakeonlan (apt-get)
+Requires `etherwake` and `wakeonlan` (apt-get).
 
 Installed `etherwake` and `wakeonlan` beacuse I had some issues with one or the other between updates, so I added both so that I don't have to worry when updating.
