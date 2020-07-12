@@ -1,5 +1,6 @@
 #!/bin/bash
 # this runs as a @reboot cron task
+
 #run
 # cronetab -e
 # @reboot bash /home/pi/power-on-server.sh > power-on-server.log
