@@ -1,5 +1,9 @@
 # pi-wol
 
+It’s the hail Mary of wake on lan commands for my raspberry pi / pi zero.
+
+I use this to ping my servers and wake them up if they are off.  They should never be.
+
 ## install
 
 `sudo apt-get install etherwake`
