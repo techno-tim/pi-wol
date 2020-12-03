@@ -10,8 +10,7 @@ HOSTNUM=0
 HOSTS=(192.168.0.1 192.168.0.2 192.168.0.3)
 HOSTSDOWN=false
 MACADDRS=(mac.address.1 mac.address.2 mac.address.3)
-#PING="/bin/ping -q -c1"
-PING=false
+PING="/bin/ping -q -c1"
 WAITTIME=10
 
 ### functions
