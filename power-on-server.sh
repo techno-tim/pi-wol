@@ -8,7 +8,7 @@
 
 HOSTNUM=0
 HOSTS=(192.168.0.1 192.168.0.2 192.168.0.3)
-HOSTSDOWN=false
+HOSTSDOWN=0
 MACADDRS=(mac.address.1 mac.address.2 mac.address.3)
 PING="/bin/ping -q -c1"
 WAITTIME=10
@@ -27,7 +27,7 @@ function wake_up() {
 for HOST in ${HOSTS[*]}; do
   if ! ${PING} ${HOST} > /dev/null
   then
-    HOSTSDOWN=true
+    HOSTSDOWN=$((${HOSTSDOWN}+1))
     echo "${HOST} is down $(date)"
     # try to wake
     wake_up ${HOSTNUM}
@@ -49,12 +49,11 @@ for HOST in ${HOSTS[*]}; do
     HOSTNUM=$(($HOSTNUM+1))
   else
     echo "${HOST} was up at $(date)"
-    HOSTSDOWN=false
   fi
 done
 
 # reboot
-if ${HOSTSDOWN}
+if [[ ${HOSTSDOWN} -eq ${#HOSTS[@]} ]]
   then
   echo "Pi is rebooting"
 fi
