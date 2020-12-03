@@ -1,75 +1,57 @@
 #!/bin/bash
-# this runs as a @reboot cron task
-
+# this runs as a @hourly cron task
 #run
 # cronetab -e
-# @reboot bash /home/pi/power-on-server.sh > power-on-server.log
+# @hourly bash /home/pi/power-on-server.sh > power-on-server.log
 # requires etherwake and wakeonlan (apt-get)
 # installed etherwake and wakeonlan beacuse I had some issues with one or the other between updates, so I added both
 
-PING="/bin/ping -q -c1"
-HOST=192.168.0.20
+HOSTNUM=0
+HOSTS=(192.168.0.1 192.168.0.2 192.168.0.3)
+HOSTSDOWN=false
+MACADDRS=(mac.address.1 mac.address.2 mac.address.3)
+#PING="/bin/ping -q -c1"
+PING=false
 WAITTIME=10
-HOSTISUP=true
 
 ### functions
 
 function wake_up() {
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
-
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
-
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
-
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
-
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
-
-wakeonlan mac.address
-wakeonlan -p 9 mac.address
-sudo etherwake mac.address
+  echo wakeonlan ${MACADDRS[${HOSTNUM}]}
+  echo wakeonlan -p 9 ${MACADDRS[${HOSTNUM}]}
+  echo sudo etherwake ${MACADDRS[${HOSTNUM}]}
 }
 
-
 # first sleep to allow system to connect to network and time to break out if needed
-sleep 60
+#sleep 60
 
-while [ ${HOSTISUP}  ]
-do
-        ${PING} ${HOST} > /dev/null
-        if [ $? -ne 0 ]; then
-                echo "${HOST} is down $(date)"
-		# try to wake
-		wake_up
-		sleep 10
-                wake_up
-		sleep 10
-                wake_up
-                sleep 10
-                wake_up
-                sleep 10
-		#restart networking
-		/etc/init.d/networking reload
-		sleep 15
-		# try to wake
-                wake_up
-                sleep 2
-                wake_up
-                sleep 2
-		# rebooting
-		echo "Pi is rebooting"
-		/sbin/shutdown -r now
-        fi
-        sleep $WAITTIME
-	echo "${HOST} is up $(date)"
+for HOST in ${HOSTS[*]}; do
+  if ! ${PING} ${HOST} > /dev/null
+  then
+    echo "${HOST} is down $(date)"
+    # try to wake
+    wake_up ${HOSTNUM}
+    sleep 10
+    wake_up ${HOSTNUM}
+    sleep 10
+    wake_up ${HOSTNUM}
+    sleep 10
+    wake_up ${HOSTNUM}
+    sleep 10
+    #restart networking
+    /etc/init.d/networking reload
+    sleep 15
+    # try to wake
+    wake_up ${HOSTNUM}
+    sleep 2
+    wake_up ${HOSTNUM}
+    sleep 2
+    HOSTNUM=$(($HOSTNUM+1))
+  else
+    echo "${HOST} was up at $(date)"
+  fi
 done
+
+# reboot
+#echo "Pi is rebooting"
+#/sbin/shutdown -r now
