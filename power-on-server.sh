@@ -27,6 +27,7 @@ function wake_up() {
 for HOST in ${HOSTS[*]}; do
   if ! ${PING} ${HOST} > /dev/null
   then
+    HOSTSDOWN=true
     echo "${HOST} is down $(date)"
     # try to wake
     wake_up ${HOSTNUM}
@@ -48,9 +49,13 @@ for HOST in ${HOSTS[*]}; do
     HOSTNUM=$(($HOSTNUM+1))
   else
     echo "${HOST} was up at $(date)"
+    HOSTSDOWN=false
   fi
 done
 
 # reboot
-#echo "Pi is rebooting"
-#/sbin/shutdown -r now
+if ${HOSTSDOWN}
+  then
+  echo "Pi is rebooting"
+fi
+/sbin/shutdown -r now
