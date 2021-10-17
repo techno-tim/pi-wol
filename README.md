@@ -12,7 +12,7 @@ I use this to ping my servers and wake them up if they are off.  They should nev
 
 ## cron job
 
-`cronetab -e`
+`crontab -e`
 
 `@hourly bash /home/pi/power-on-server.sh > power-on-server.log`
 (will run at reboot and will pipe out logs)
