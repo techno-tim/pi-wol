@@ -54,7 +54,8 @@ done
 
 # reboot
 if [[ ${HOSTSDOWN} -eq ${#HOSTS[@]} ]]
-  then
+then
   echo "Pi is rebooting"
+  /sbin/shutdown -r now
 fi
-/sbin/shutdown -r now
+
